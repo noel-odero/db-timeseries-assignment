@@ -43,3 +43,12 @@ Query OK, 0 rows affected (0.04 sec)
 -- Step 2: Load CSV data into staging table
 -- Note: File path will vary by user
 -- --------------------------------------------
+
+mysql> LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/global_climate_health_impact_tracker_2015_2025.csv'
+    -> INTO TABLE temp_staging
+    -> FIELDS TERMINATED BY ','
+    -> ENCLOSED BY '"'
+    -> LINES TERMINATED BY '\n'
+    -> IGNORE 1 ROWS;
+Query OK, 14100 rows affected (0.45 sec)
+Records: 14100  Deleted: 0  Skipped: 0  Warnings: 0
