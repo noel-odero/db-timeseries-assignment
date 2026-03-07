@@ -1,0 +1,23 @@
+
+======================================================================
+TASK 4 PREDICTION RESULT - XGBoost Model (xgboost_tuned.pkl)
+======================================================================
+
+Generated: 2026-03-07 15:57:47
+
+INPUT DATA:
+  Country: United States
+  Date: 2025-10-19
+  Temperature: -4.71�C
+  Precipitation: 73.70mm
+  PM2.5: 0.00
+  Current Respiratory Rate: 70.60
+
+PREDICTION:
+  Respiratory Disease Rate: 62.44 per 100,000
+
+MODEL INFO:
+  Model: XGBoost Regressor (tuned)
+  Model File: xgboost_tuned.pkl
+  Features Used: 37
+======================================================================
