@@ -1,0 +1,45 @@
+-- ==================================================
+-- LOAD_DATA.SQL - How I imported the data into MySQL
+-- ==================================================
+
+-- Step 1: I Created staging table for raw CSV data
+-- --------------------------------------------
+
+mysql> CREATE TABLE temp_staging (
+    ->     col1 VARCHAR(255),
+    ->     col2 VARCHAR(255),
+    ->     col3 VARCHAR(255),
+    ->     col4 VARCHAR(255),
+    ->     col5 VARCHAR(255),
+    ->     col6 VARCHAR(255),
+    ->     col7 VARCHAR(255),
+    ->     col8 VARCHAR(255),
+    ->     col9 VARCHAR(255),
+    ->     col10 VARCHAR(255),
+    ->     col11 VARCHAR(255),
+    ->     col12 VARCHAR(255),
+    ->     col13 VARCHAR(255),
+    ->     col14 VARCHAR(255),
+    ->     col15 VARCHAR(255),
+    ->     col16 VARCHAR(255),
+    ->     col17 VARCHAR(255),
+    ->     col18 VARCHAR(255),
+    ->     col19 VARCHAR(255),
+    ->     col20 VARCHAR(255),
+    ->     col21 VARCHAR(255),
+    ->     col22 VARCHAR(255),
+    ->     col23 VARCHAR(255),
+    ->     col24 VARCHAR(255),
+    ->     col25 VARCHAR(255),
+    ->     col26 VARCHAR(255),
+    ->     col27 VARCHAR(255),
+    ->     col28 VARCHAR(255),
+    ->     col29 VARCHAR(255),
+    ->     col30 VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+-- --------------------------------------------
+-- Step 2: Load CSV data into staging table
+-- Note: File path will vary by user
+-- --------------------------------------------
