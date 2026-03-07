@@ -65,6 +65,7 @@ mysql> SELECT COUNT(*) AS total_records_loaded FROM temp_staging;
 -- --------------------------------------------
 -- Step 3: Populate dimension tables
 -- --------------------------------------------
+-- Insert into countries
 mysql> INSERT IGNORE INTO countries (country_code, country_name, region, income_level, population_millions, latitude, longitude)
     -> SELECT DISTINCT
     ->     col2, col3, col4, col5,
@@ -74,3 +75,77 @@ mysql> INSERT IGNORE INTO countries (country_code, country_name, region, income_
     -> FROM temp_staging;
 Query OK, 25 rows affected (0.33 sec)
 Records: 25  Duplicates: 0  Warnings: 0
+
+-- Insert into dates
+mysql> INSERT IGNORE INTO dates (date, year, month, week, quarter, day_of_week, is_weekend)
+    -> SELECT DISTINCT
+    ->     col6,
+    ->     CAST(col7 AS UNSIGNED),
+    ->     CAST(col8 AS UNSIGNED),
+    ->     CAST(col9 AS UNSIGNED),
+    ->     QUARTER(col6),
+    ->     DAYOFWEEK(col6) - 1,
+    ->     CASE WHEN DAYOFWEEK(col6) IN (1,7) THEN TRUE ELSE FALSE END
+    -> FROM temp_staging;
+Query OK, 564 rows affected (0.22 sec)
+Records: 564  Duplicates: 0  Warnings: 0
+
+
+-- --------------------------------------------
+-- Step 4: Populate fact tables
+-- --------------------------------------------
+
+-- Insert into climate_measurements
+mysql> INSERT INTO climate_measurements (
+    ->     country_id, date_id, temperature_celsius, temp_anomaly_celsius,
+    ->     precipitation_mm, heat_wave_days, drought_indicator,
+    ->     flood_indicator, extreme_weather_events, pm25_ugm3, air_quality_index
+    -> )
+    -> SELECT
+    ->     c.country_id,
+    ->     d.date_id,
+    ->     CAST(t.col13 AS DECIMAL(5,2)),
+    ->     CAST(t.col14 AS DECIMAL(4,2)),
+    ->     CAST(t.col15 AS DECIMAL(6,2)),
+    ->     CAST(t.col16 AS UNSIGNED),
+    ->     CAST(t.col17 AS UNSIGNED),
+    ->     CAST(t.col18 AS UNSIGNED),
+    ->     CAST(t.col19 AS UNSIGNED),
+    ->     CAST(t.col20 AS DECIMAL(6,2)),
+    ->     CAST(t.col21 AS DECIMAL(6,2))  -- Changed from UNSIGNED to DECIMAL(6,2)
+    -> FROM temp_staging t
+    -> JOIN countries c ON t.col2 = c.country_code
+    -> JOIN dates d ON t.col6 = d.date
+    -> ON DUPLICATE KEY UPDATE
+    ->     temperature_celsius = VALUES(temperature_celsius);
+Query OK, 14100 rows affected, 1 warning (1.42 sec)
+Records: 14100  Duplicates: 0  Warnings: 1
+
+-- Insert into health_measurements
+
+mysql> INSERT INTO health_measurements (
+    ->     country_id, date_id, respiratory_disease_rate,
+    ->     cardio_mortality_rate, vector_disease_risk_score,
+    ->     waterborne_disease_incidents, heat_related_admissions,
+    ->     mental_health_index, food_security_index,
+    ->     healthcare_access_index, gdp_per_capita_usd
+    -> )
+    -> SELECT
+    ->     c.country_id,
+    ->     d.date_id,
+    ->     CAST(t.col22 AS DECIMAL(8,2)),
+    ->     CAST(t.col23 AS DECIMAL(8,2)),
+    ->     CAST(t.col24 AS DECIMAL(5,2)),
+    ->     CAST(t.col25 AS DECIMAL(8,2)),
+    ->     CAST(t.col26 AS DECIMAL(8,2)),
+    ->     CAST(t.col29 AS DECIMAL(5,2)),
+    ->     CAST(t.col30 AS DECIMAL(5,2)),
+    ->     CAST(t.col27 AS DECIMAL(5,2)),
+    ->     CAST(t.col28 AS DECIMAL(10,2))
+    -> FROM temp_staging t
+    -> JOIN countries c ON t.col2 = c.country_code
+    -> JOIN dates d ON t.col6 = d.date
+    -> ON DUPLICATE KEY UPDATE
+    ->     respiratory_disease_rate = VALUES(respiratory_disease_rate);
+Query OK, 14100 rows affected, 1 warning (1.54 sec)
+Records: 14100  Duplicates: 0  Warnings: 1
