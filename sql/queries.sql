@@ -67,3 +67,39 @@ mysql> SELECT
 | India        | 2024-08-25 |                7.72 |                    70.50 |                    0.00 |
 +--------------+------------+---------------------+--------------------------+-------------------------+
 13 rows in set (0.04 sec)
+
+-- --------------------------------------------
+-- QUERY 3: Moving Average (4-week)
+-- Purpose: Calculate rolling average of respiratory disease rate for Kenya
+-- Required: Assignment requires lagged features/moving averages
+-- --------------------------------------------
+
+mysql> SELECT
+    ->     c.country_name,
+    ->     d.date,
+    ->     hm.respiratory_disease_rate,
+    ->     AVG(hm.respiratory_disease_rate) OVER (
+    ->         ORDER BY d.date
+    ->         ROWS BETWEEN 3 PRECEDING AND CURRENT ROW
+    ->     ) as moving_avg_4week
+    -> FROM health_measurements hm
+    -> JOIN countries c ON hm.country_id = c.country_id
+    -> JOIN dates d ON hm.date_id = d.date_id
+    -> WHERE c.country_code = 'KEN'
+    -> ORDER BY d.date
+    -> LIMIT 10;
++--------------+------------+--------------------------+------------------+
+| country_name | date       | respiratory_disease_rate | moving_avg_4week |
++--------------+------------+--------------------------+------------------+
+| Kenya        | 2015-01-04 |                    99.40 |        99.400000 |
+| Kenya        | 2015-01-11 |                    82.60 |        91.000000 |
+| Kenya        | 2015-01-18 |                    65.00 |        82.333333 |
+| Kenya        | 2015-01-25 |                    77.60 |        81.150000 |
+| Kenya        | 2015-02-01 |                    65.20 |        72.600000 |
+| Kenya        | 2015-02-08 |                    90.70 |        74.625000 |
+| Kenya        | 2015-02-15 |                    76.10 |        77.400000 |
+| Kenya        | 2015-02-22 |                    79.60 |        77.900000 |
+| Kenya        | 2015-03-01 |                    79.60 |        81.500000 |
+| Kenya        | 2015-03-08 |                    85.70 |        80.250000 |
++--------------+------------+--------------------------+------------------+
+10 rows in set (0.03 sec)
