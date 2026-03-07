@@ -149,3 +149,25 @@ mysql> INSERT INTO health_measurements (
     ->     respiratory_disease_rate = VALUES(respiratory_disease_rate);
 Query OK, 14100 rows affected, 1 warning (1.54 sec)
 Records: 14100  Duplicates: 0  Warnings: 1
+
+
+-- --------------------------------------------
+-- Step 6: Verify final counts
+-- --------------------------------------------
+
+mysql> SELECT 'countries' AS table_name, COUNT(*) FROM countries
+    -> UNION ALL
+    -> SELECT 'dates', COUNT(*) FROM dates
+    -> UNION ALL
+    -> SELECT 'climate_measurements', COUNT(*) FROM climate_measurements
+    -> UNION ALL
+    -> SELECT 'health_measurements', COUNT(*) FROM health_measurements;
++----------------------+----------+
+| table_name           | COUNT(*) |
++----------------------+----------+
+| countries            |       25 |
+| dates                |      565 |
+| climate_measurements |    14100 |
+| health_measurements  |    14100 |
++----------------------+----------+
+4 rows in set (0.12 sec)
