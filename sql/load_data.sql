@@ -52,3 +52,25 @@ mysql> LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/global_cl
     -> IGNORE 1 ROWS;
 Query OK, 14100 rows affected (0.45 sec)
 Records: 14100  Deleted: 0  Skipped: 0  Warnings: 0
+
+-- Verify data loaded into staging
+mysql> SELECT COUNT(*) AS total_records_loaded FROM temp_staging;
++----------------------+
+| total_records_loaded |
++----------------------+
+|                14100 |
++----------------------+
+1 row in set (0.11 sec)
+
+-- --------------------------------------------
+-- Step 3: Populate dimension tables
+-- --------------------------------------------
+mysql> INSERT IGNORE INTO countries (country_code, country_name, region, income_level, population_millions, latitude, longitude)
+    -> SELECT DISTINCT
+    ->     col2, col3, col4, col5,
+    ->     CAST(col12 AS DECIMAL(10,2)),
+    ->     CAST(col10 AS DECIMAL(10,6)),
+    ->     CAST(col11 AS DECIMAL(10,6))
+    -> FROM temp_staging;
+Query OK, 25 rows affected (0.33 sec)
+Records: 25  Duplicates: 0  Warnings: 0
