@@ -23,32 +23,41 @@ This project implements a full-stack solution for storing, analyzing, and predic
 
 ```
 db-timeseries-assignment/
-├── data/                          # Raw data files
-├── david/                         # MongoDB implementation
-│   ├── app.py                    # MongoDB Flask API
-│   ├── predict.py                # MongoDB prediction script
-│   ├── mongosh/                  # MongoDB shell screenshots
-│   └── postman/                  # API testing screenshots
-├── docs/                          # Documentation and schemas
-│   └── climate database schema.jpeg
-├── models/                        # Trained ML models
-│   └── xgboost_tuned.pkl         # Best performing model
-├── mysql_api/                     # MySQL API implementation
-│   ├── mysql_crud_api.py         # Flask API with full CRUD
-│   ├── requirements.txt          # Python dependencies
-│   └── .env                      # Environment variables
-├── notebooks/                     # Jupyter notebooks
-│   └── task1_climate_health.ipynb
-├── prediction/                    # Prediction scripts
-│   ├── mysql_predict.py          # MySQL-based predictions
-│   └── prediction_result.txt     # Sample prediction output
-├── screenshots/                   # API testing evidence
+├── data/
+│   └── data.csv
+├── models/
+│   └── xgboost_tuned.pkl
+├── MongoDB/
+│   ├── app.py
+│   ├── predict.py
+│   ├── MongoDB_Queries/
+│   └── requests_summary.md
+├── mysql_api/
+│   ├── mysql_crud_api.py
+│   ├── requirements.txt
+│   ├── .env
+│   └── README.md
+├── notebooks/
+│   ├── task1_climate_health.ipynb
+│   └── README.md
+├── prediction/
+│   ├── mysql_predict.py
+│   ├── MySQL_prediction_result.txt
+│   ├── MongoDB_predict.py
+│   └── MongoDB_prediction_result.txt
+├── screenshots/
+│   ├── task_2_MongoDB_Screenshots/
+│   ├── task_3_MongoDB_Screenshots/
 │   ├── task_3_MYSQL_screenshots/
+│   ├── task_4_MongoDB_Screenshots/
 │   └── task_4_mysql_screenshots/
-└── sql/                          # SQL scripts
-    ├── schema.sql                # Database schema
-    ├── load_data.sql             # Data loading scripts
-    └── queries.sql               # Sample queries
+├── sql/
+│   ├── schema.sql
+│   ├── load_data.sql
+│   ├── queries.sql
+│   └── MySQL_ERD.jpeg
+├── data.csv
+└── README.md
 ```
 
 ##  Quick Start
@@ -95,7 +104,7 @@ python mysql_crud_api.py
 
 6. **Run the MongoDB API** 
 ```bash
-cd david
+cd MongoDB
 python app.py
 ```
 
@@ -221,8 +230,8 @@ python mysql_predict.py
 
 **MongoDB-based prediction:**
 ```bash
-cd david
-python predict.py
+cd prediction
+python MongoDB_predict.py
 ```
 
 The script will:
@@ -243,9 +252,11 @@ jupyter notebook task1_climate_health.ipynb
 ##  Testing
 
 All API endpoints have been tested using Postman. Screenshots are available in:
-- `screenshots/task_3_MYSQL_screenshots/` - CRUD operations
-- `screenshots/task_4_mysql_screenshots/` - Prediction workflow
-- `david/postman/` - MongoDB API tests
+- `screenshots/task_2_MongoDB_Screenshots/` - MongoDB shell operations
+- `screenshots/task_3_MongoDB_Screenshots/` - MongoDB API CRUD tests
+- `screenshots/task_3_MYSQL_screenshots/` - MySQL API CRUD operations
+- `screenshots/task_4_MongoDB_Screenshots/` - MongoDB prediction workflow
+- `screenshots/task_4_mysql_screenshots/` - MySQL prediction workflow
 
 ##  Dependencies
 
@@ -282,7 +293,7 @@ mysql_config = {
 ```
 
 ### MongoDB Configuration
-Edit connection string in `david/app.py`:
+Edit connection string in `MongoDB/app.py`:
 ```python
 MONGO_URI = "mongodb+srv://<username>:<password>@cluster0.xxx.mongodb.net/"
 ```

@@ -2,16 +2,30 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from datetime import datetime
+import ssl
+import os
+
+# Disable SSL verification warnings for Python 3.14
+os.environ['PYTHONHTTPSVERIFY'] = '0'
 
 app = Flask(__name__)
 @app.route('/')
 def home():
     return "MongoDB API is running!"
+
 # ------------------- Connect to MongoDB Atlas -------------------
-MONGO_URI = "mongodb+srv://dbirenzi_db_user:0jNztsP3qkTYOniX@cluster0.tofse6y.mongodb.net/climate_health_db?retryWrites=true&w=majority&authSource=admin"
-client = MongoClient(MONGO_URI)
+MONGO_URI = "mongodb+srv://dbirenzi_db_user:0jNztsP3qkTYOniX@cluster0.tofse6y.mongodb.net/climate_health_db?retryWrites=true&w=majority&authSource=admin&tls=true&tlsAllowInvalidCertificates=true"
+
+client = MongoClient(
+    MONGO_URI,
+    serverSelectionTimeoutMS=30000,
+    connectTimeoutMS=30000,
+    socketTimeoutMS=30000
+)
 db = client["climate_health_db"]
 mongo_collection = db["climate_data"]
+
+print("MongoDB connection initialized")
 
 # ------------------- CREATE -------------------
 @app.route('/api/mongo/create', methods=['POST'])
@@ -38,8 +52,8 @@ def latest_record(country_name):
 # ------------------- READ: Records by Date Range -------------------
 @app.route('/api/mongo/range/<country_name>', methods=['GET'])
 def records_by_range(country_name):
-    start = request.args.get('start')  # e.g., 2024-02-01
-    end = request.args.get('end')      # e.g., 2025-05-31
+    start = request.args.get('start')
+    end = request.args.get('end')
     try:
         start_date = datetime.fromisoformat(start)
         end_date = datetime.fromisoformat(end)

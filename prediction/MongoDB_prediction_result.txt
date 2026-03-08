@@ -1,0 +1,22 @@
+
+======================================================================
+MONGODB PREDICTION RESULT - XGBoost Model
+======================================================================
+
+Generated: 2026-03-08 07:47:08
+
+INPUT DATA:
+  Country: Kenya
+  Date: 2025-10-19
+  Temperature: 15.82°C
+  PM2.5: 94.10
+  Current Respiratory Rate: 44.90
+
+PREDICTION:
+  Respiratory Disease Rate: 61.95 per 100,000
+
+MODEL INFO:
+  Model: XGBoost Regressor (tuned)
+  Model File: xgboost_tuned.pkl
+  Features Used: 37
+======================================================================
